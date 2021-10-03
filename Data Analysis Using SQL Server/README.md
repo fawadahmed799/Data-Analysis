@@ -4,3 +4,5 @@ In this project, we will use the same NCDB dataset we used for project in Python
 <li>Its huge, over 6.5 million rows</li>
 <li>We used the same data in our Python project, we want to compare analysis</li>
 </ol>
+
+Data source: https://opendatatc.blob.core.windows.net/opendatatc/NCDB_1999_to_2017.csv
