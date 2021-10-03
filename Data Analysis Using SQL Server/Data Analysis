@@ -1,1 +1,480 @@
+--Download the Dataset from https://opendatatc.blob.core.windows.net/opendatatc/NCDB_1999_to_2017.csv
+--Import the dataset into SQL Server 2019 using SSMS by the following steps:
+--1) In Object Explorer, right click on Databases, Create new database by name 'NCDB'
+--2) Right click NCDB, tasks, Import flat file. Browse the downloaded dataset and complete the process.
 
+--Make database active
+USE NCDB
+
+--Getting number of rows
+SELECT COUNT (*) FROM collisions
+
+
+--Top 5 rows of dataset
+SELECT TOP 5 * FROM collisions
+
+
+--Bottom 5 rows of dataset
+SELECT TOP 5 * FROM collisions
+ORDER BY C_CASE desc
+
+
+--Getting Data types of our columns
+SELECT COLUMN_NAME, DATA_TYPE 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'collisions'
+
+
+-- Dropping unnecessary columns
+ALTER TABLE collisions
+DROP COLUMN PERSON_POSITION, C_CASE, V_ID, P_ID,C_VEHS, C_RCFG, C_RALN, C_TRAF, V_YEAR, P_ISEV, P_SAFE, P_USER, 
+
+--Giving columns meaningful names
+EXEC sp_rename 'collisions.C_YEAR', 'YEAR', 'COLUMN' 
+EXEC sp_rename 'collisions.C_MNTH', 'MNTH', 'COLUMN' 
+EXEC sp_rename 'collisions.C_WDAY', 'DAY', 'COLUMN' 
+EXEC sp_rename 'collisions.C_HOUR', 'TIME', 'COLUMN' 
+EXEC sp_rename 'collisions.C_SEV', 'SEVERITY', 'COLUMN' 
+EXEC sp_rename 'collisions.C_CONF.', 'Collision_CONF.', 'COLUMN' 
+EXEC sp_rename 'collisions.C_WTHR', 'WEATHER', 'COLUMN' 
+EXEC sp_rename 'collisions.C_RSUR', 'RD_SURFACE', 'COLUMN' 
+EXEC sp_rename 'collisions.V_TYPE', 'VEHICLE_TYPE', 'COLUMN' 
+EXEC sp_rename 'collisions.P_SEX', 'GENDER', 'COLUMN' 
+EXEC sp_rename 'collisions.P_AGE', 'AGE', 'COLUMN' 
+
+
+
+
+--Looking at all the unique values we have in each column, and to delete the rows with invalid values
+SELECT DISTINCT YEAR FROM collisions ORDER BY YEAR
+SELECT DISTINCT MNTH FROM collisions ORDER BY MNTH
+SELECT DISTINCT DAY FROM collisions ORDER BY DAY
+SELECT DISTINCT TIME FROM collisions ORDER BY TIME
+SELECT DISTINCT SEVERITY FROM collisions ORDER BY SEVERITY
+SELECT DISTINCT Collision_CONF FROM collisions ORDER BY Collision_CONF
+SELECT DISTINCT WEATHER FROM collisions ORDER BY WEATHER
+SELECT DISTINCT RD_SURFACE FROM collisions ORDER BY RD_SURFACE
+SELECT DISTINCT VEHICLE_TYPE FROM collisions ORDER BY VEHICLE_TYPE
+SELECT DISTINCT GENDER FROM collisions ORDER BY GENDER
+SELECT DISTINCT AGE FROM collisions ORDER BY AGE
+
+
+--deleting rows with invalid values e,g, UU in Month column
+DELETE FROM collisions 
+WHERE MNTH = 'UU' 
+OR DAY= 'U' 
+OR TIME= 'UU' 
+OR Collision_CONF= 'UU' 
+OR Collision_CONF= 'QQ' 
+OR WEATHER= 'U' 
+OR WEATHER= 'Q' 
+OR RD_SURFACE= 'U' 
+OR RD_SURFACE= 'Q' 
+OR VEHICLE_TYPE= 'QQ' 
+OR VEHICLE_TYPE= 'NN' 
+OR VEHICLE_TYPE= 'UU' 
+OR GENDER= 'U' 
+OR GENDER= 'N' 
+OR AGE= 'NN' 
+OR AGE = 'UU' 
+
+-- Replacing the codes with their descriptions as given in the dictionary
+UPDATE collisions
+SET 
+DAY = REPLACE(DAY, '1','MON')
+
+UPDATE collisions
+SET 
+DAY = REPLACE(DAY, '2','TUE')
+
+UPDATE collisions
+SET 
+DAY = REPLACE(DAY, '3','WED')
+
+UPDATE collisions
+SET 
+DAY = REPLACE(DAY, '4','THUR')
+
+UPDATE collisions
+SET 
+DAY = REPLACE(DAY, '5','FRI')
+
+UPDATE collisions
+SET 
+DAY = REPLACE(DAY, '6','SAT')
+
+UPDATE collisions
+SET 
+DAY = REPLACE(DAY, '7','SUN')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '01','SINGLE_VEHICLE')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '02','SINGLE_VEHICLE')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '03','SINGLE_VEHICLE')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '04','SINGLE_VEHICLE')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '05','SINGLE_VEHICLE')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '06','SINGLE_VEHICLE')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '21','TWO_VEHICLE_SAME_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '22','TWO_VEHICLE_SAME_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '23','TWO_VEHICLE_SAME_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '24','TWO_VEHICLE_SAME_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '25','TWO_VEHICLE_SAME_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '31','TWO_VEHICLE_OPP_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '32','TWO_VEHICLE_OPP_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '33','TWO_VEHICLE_OPP_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '34','TWO_VEHICLE_OPP_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '35','TWO_VEHICLE_OPP_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '36','TWO_VEHICLE_OPP_DIR')
+
+UPDATE collisions
+SET 
+Collision_CONF = REPLACE(Collision_CONF, '41','TWO_VEHICLE_OPP_DIR')
+
+
+UPDATE collisions
+SET 
+WEATHER = REPLACE(WEATHER, '1','SUNNY')
+
+UPDATE collisions
+SET 
+WEATHER = REPLACE(WEATHER, '2','CLOUDY')
+
+UPDATE collisions
+SET 
+WEATHER = REPLACE(WEATHER, '3','RAINY')
+
+UPDATE collisions
+SET 
+WEATHER = REPLACE(WEATHER, '4','SNOW')
+
+UPDATE collisions
+SET 
+WEATHER = REPLACE(WEATHER, '5','FREEZING RAIN/HAIL')
+
+UPDATE collisions
+SET 
+WEATHER = REPLACE(WEATHER, '6','LIMITED VISIBILITY')
+
+UPDATE collisions
+SET 
+WEATHER = REPLACE(WEATHER, '7','GUST')
+
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '1','DRY')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '2','WET')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '3','SNOW')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '4','SLUSH')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '5','ICY')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '6','SAND/GRAVEL')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '7','MUDDY')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '8','OILY')
+
+UPDATE collisions
+SET 
+RD_SURFACE = REPLACE(RD_SURFACE, '9','FLOODED')
+
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '01','LIGHT DUTY')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '05','CARGO VAN')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '06','CARGO VAN')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '07','HEAVY UNIT')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '08','ROAD TRACTOR')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '09','SCHOOL BUS_STANDARD')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '10','SCHOOL BUS_SMALL')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '11','INTERCITY BUS')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '14','MOTORCYCLE')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '16','ATV')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '17','BICYCLE')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '18','MOTORHOME')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '19','FARM EQUIPMENT')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '20','CONSTRUCTION EQUIPMENT')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '21','FIRE ENGINE')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '22','SNOWMOBILE')
+
+UPDATE collisions
+SET 
+VEHICLE_TYPE = REPLACE(VEHICLE_TYPE, '23','STREET CAR')
+
+
+
+--SEVERITY columns has records for both injuries and fatalities. Since we are analyzing only the Fatalities, lets delete records of Injuries
+UPDATE collisions
+SET 
+SEVERITY = REPLACE(SEVERITY, '2','0')
+
+
+--Renaming SEVERITY column to FATALITY
+EXEC sp_rename 'collisions.SEVERITY', 'FATALITY', 'COLUMN' 
+
+--Lets make sure we have records only for Fatalities
+SELECT DISTINCT FATALITY FROM collisions ORDER BY FATALITY
+
+
+--ANALYSIS: We are going to analyze the effect of following factors on fatality rate:
+--1)Collision Configuration
+--2)Weather
+--3)Day & Time
+--4)Road surface
+--5)Gender over years
+--6)Vehicle Type
+
+
+--Changing Data type of FATALITYn to Int so we can do aggregations
+ALTER TABLE collisions
+ALTER COLUMN FATALITY int;
+
+
+--1)Collision Configuration
+
+SELECT Collision_CONF, SUM(FATALITY)* 100.0 / SUM(SUM(FATALITY)) OVER () AS Percentage
+FROM collisions
+GROUP BY Collision_CONF
+ORDER BY 2 DESC
+
+--OUTPUT: Results are exactly the same as in our analysis using Python/ Jupyter Notebook
+--TWO_VEHICLE_OPP_DIR	52.224556704839
+--SINGLE_VEHICLE	34.722478758773
+--TWO_VEHICLE_SAME_DIR	13.052964536387
+
+--2)Weather
+
+SELECT WEATHER, SUM(FATALITY)* 100.0 / SUM(SUM(FATALITY)) OVER () AS Percentage
+FROM collisions
+GROUP BY WEATHER
+ORDER BY 2 DESC
+
+--OUTPUT: Results are exactly the same as in our analysis using Python/ Jupyter Notebook
+--SUNNY	68.680735131141
+--CLOUDY	11.966660509789
+--RAINY	8.220585519024
+--SNOW	6.311183967491
+--LIMITED VISIBILITY	3.542898042113
+--FREEZING RAIN/HAIL	0.793082748429
+--GUST	0.484854082009
+
+--3)Day & Time
+SELECT TOP 5 DAY, TIME, SUM(FATALITY)* 100.0 / SUM(SUM(FATALITY)) OVER () AS Percentage
+FROM collisions
+GROUP BY DAY, TIME
+ORDER BY 3 DESC
+
+--OUTPUT: Results are same as in our analysis using Python/ Jupyter Notebook i.e. Highest fatality rate is on Friday 4pm.
+--FRI	16	1.208671961581
+--SUN	16	1.141715921684
+--SUN	15	1.037818618396
+--SAT	17	1.035509789434
+--FRI	13	1.010112670853
+
+
+--4)Road surface
+SELECT RD_SURFACE, SUM(FATALITY)* 100.0 / SUM(SUM(FATALITY)) OVER () AS Percentage
+FROM collisions
+GROUP BY RD_SURFACE
+ORDER BY 2 DESC
+
+--OUTPUT: Results are exactly the same as in our analysis using Python/ Jupyter Notebook
+--RD_SURFACE	Percentage
+--DRY	69.672377170299
+--WET	15.645779460657
+--ICY	6.475110823790
+--SNOW	5.024011821204
+--SLUSH	1.750092353158
+--SAND/GRAVEL	1.202899889176
+--MUDDY	0.207794606575
+--FLOODED	0.017316217214
+--OILY	0.004617657923
+
+
+
+
+--5)Gender over years
+SELECT YEAR, GENDER, SUM(FATALITY)* 100.0 / SUM(SUM(FATALITY)) OVER () AS Percentage
+FROM collisions
+GROUP BY YEAR, GENDER
+ORDER BY 3 DESC
+
+--OUTPUT: Results are exactly the same as in our analysis using Python/ Jupyter Notebook
+--YEAR	GENDER	Percentage
+--1999	M	4.656908016254
+--2002	M	4.535694495751
+--2000	M	4.421407462135
+--2005	M	4.397164758034
+--2001	M	4.357914665681
+--2004	M	4.307120428518
+--2006	M	4.258635020317
+--2003	M	4.228620243812
+--2007	M	4.091244920576
+--2008	M	3.460934613963
+--2010	M	3.220816401920
+--2009	M	3.094985223494
+--2011	M	2.919514222386
+--2012	M	2.857175840413
+--2015	M	2.739425563354
+--2016	M	2.723263760620
+--2013	M	2.688631326191
+--2017	M	2.626292944218
+--2014	M	2.621675286294
+--1999	F	2.296130402659
+--2002	F	2.120659401551
+--2005	F	2.076791651274
+--2004	F	2.043313631326
+--2003	F	1.999445881049
+--2006	F	1.984438492796
+--2001	F	1.963659032138
+--2000	F	1.925563354266
+--2007	F	1.867842630217
+--2008	F	1.604636128555
+--2010	F	1.504202068710
+--2009	F	1.461488732914
+--2011	F	1.424547469523
+--2012	F	1.352973771702
+--2013	F	1.326422238640
+--2016	F	1.287172146287
+--2015	F	1.266392685629
+--2017	F	1.192510158847
+--2014	F	1.094384927964
+
+
+
+
+--6)Vehicle Type
+SELECT VEHICLE_TYPE, SUM(FATALITY)* 100.0 / SUM(SUM(FATALITY)) OVER () AS Percentage
+FROM collisions
+GROUP BY VEHICLE_TYPE
+ORDER BY 2 DESC
+
+--OUTPUT: Results are exactly the same as in our analysis using Python/ Jupyter Notebook
+--LIGHT DUTY	76.074759881787
+--ROAD TRACTOR	5.605836719615
+--CARGO VAN	5.540035094200
+--MOTORCYCLE	4.568018101219
+--HEAVY UNIT	3.342029922423
+--INTERCITY BUS	1.467260805319
+--BICYCLE	1.002031769486
+--SCHOOL BUS_STANDARD	0.751523827114
+--SNOWMOBILE	0.309383080901
+--CONSTRUCTION EQUIPMENT	0.281677133357
+--MOTORHOME	0.200868119689
+--STREET CAR	0.144301810121
+--FARM EQUIPMENT	0.138529737717
+--FIRE ENGINE	0.024242704100
+--SCHOOL BUS_SMALL	0.010389730328
