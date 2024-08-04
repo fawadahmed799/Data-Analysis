@@ -1,1 +1,81 @@
+--We have a table Students with student id, student name and previous 5 year percentages and grades in the same row tha makes the report too wide and difficult to read.
+--We need to transform the report into tall format using UNPIVOT function and to optimize it for use in BI reporting tools as Power BI.
 
+SELECT * FROM STUDENTS
+
+/*
+student_id	student_name	percentage_currentYear	percentage_previousYear1	percentage_previousYear2	percentage_previousYear3	percentage_previousYear4	grade_currentYear	grade_previousYear1	grade_previousYear2	grade_previousYear3	grade_previousYear4
+1	John Doe	85.5	82.3	80	78.5	76	A 	B 	B 	C 	C 
+2	Jane Smith	90	88.5	87	85.5	84	A 	A 	B 	B 	C 
+3	Alice Johnson	70	75.5	78	72.5	69	C 	C 	B 	C 	D 
+4	Bob Brown	92	89.5	91	90	88.5	A 	A 	A 	A 	B 
+5	Charlie Davis	65	67.5	69	66.5	64	D 	D 	C 	D 	D 
+*/
+
+-- Unpivoting the data: 
+
+WITH StudentData AS (
+    SELECT
+        student_id,
+        student_name,
+        percentage_currentYear,
+        percentage_previousYear1,
+        percentage_previousYear2,
+        percentage_previousYear3,
+        percentage_previousYear4,
+        grade_currentYear,
+        grade_previousYear1,
+        grade_previousYear2,
+        grade_previousYear3,
+        grade_previousYear4
+    FROM Students
+)
+SELECT
+    student_id,
+    student_name,
+   CASE Year
+        WHEN 'percentage_currentYear' THEN YEAR(GETDATE())
+        WHEN 'percentage_previousYear1' THEN YEAR(GETDATE()) - 1
+        WHEN 'percentage_previousYear2' THEN YEAR(GETDATE()) - 2
+        WHEN 'percentage_previousYear3' THEN YEAR(GETDATE()) - 3
+        WHEN 'percentage_previousYear4' THEN YEAR(GETDATE()) - 4
+    END AS Year,
+    percentage,
+    grade
+FROM
+    StudentData
+UNPIVOT
+    (percentage FOR Year IN (percentage_currentYear, percentage_previousYear1, percentage_previousYear2, percentage_previousYear3, percentage_previousYear4)) AS UnpvtPercentage
+UNPIVOT
+    (grade FOR gr_year IN (grade_currentYear, grade_previousYear1, grade_previousYear2, grade_previousYear3, grade_previousYear4)) AS UnpvtGrade
+
+where right(year,1)=right(gr_year,1)
+
+/*
+student_id	student_name	Year	percentage	grade
+1	John Doe	2024	85.5	A 
+1	John Doe	2023	82.3	B 
+1	John Doe	2022	80	B 
+1	John Doe	2021	78.5	C 
+1	John Doe	2020	76	C 
+2	Jane Smith	2024	90	A 
+2	Jane Smith	2023	88.5	A 
+2	Jane Smith	2022	87	B 
+2	Jane Smith	2021	85.5	B 
+2	Jane Smith	2020	84	C 
+3	Alice Johnson	2024	70	C 
+3	Alice Johnson	2023	75.5	C 
+3	Alice Johnson	2022	78	B 
+3	Alice Johnson	2021	72.5	C 
+3	Alice Johnson	2020	69	D 
+4	Bob Brown	2024	92	A 
+4	Bob Brown	2023	89.5	A 
+4	Bob Brown	2022	91	A 
+4	Bob Brown	2021	90	A 
+4	Bob Brown	2020	88.5	B 
+5	Charlie Davis	2024	65	D 
+5	Charlie Davis	2023	67.5	D 
+5	Charlie Davis	2022	69	C 
+5	Charlie Davis	2021	66.5	D 
+5	Charlie Davis	2020	64	D 
+*/
