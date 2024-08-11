@@ -5,11 +5,11 @@ SELECT * FROM STUDENTS
 
 /*
 student_id	student_name	percentage_currentYear	percentage_previousYear1	percentage_previousYear2	percentage_previousYear3	percentage_previousYear4	grade_currentYear	grade_previousYear1	grade_previousYear2	grade_previousYear3	grade_previousYear4
-1	John Doe	85.5	82.3	80	78.5	76	A 	B 	B 	C 	C 
-2	Jane Smith	90	88.5	87	85.5	84	A 	A 	B 	B 	C 
-3	Alice Johnson	70	75.5	78	72.5	69	C 	C 	B 	C 	D 
-4	Bob Brown	92	89.5	91	90	88.5	A 	A 	A 	A 	B 
-5	Charlie Davis	65	67.5	69	66.5	64	D 	D 	C 	D 	D 
+1	        John Doe	    85.5	                82.3	                    80	                        78.5	                    76                        	A 	                B 	                B                 	C 	                C 
+2	        Jane Smith	    90	                    88.5	                    87	                        85.5	                    84	                        A 	                A 	                B 	                B 	                C 
+3	        Alice Johnson	70	                    75.5	                    78	                        72.5	                    69	                        C 	                C 	                B 	                C 	                D 
+4	        Bob Brown	    92	                    89.5	                    91	                        90	                        88.5	                    A 	                A 	                A                 	A 	                B 
+5	        Charlie Davis	65	                    67.5	                    69	                        66.5	                    64	                        D 	                D                 	C                 	D 	                D 
 */
 
 -- Unpivoting the data: 
