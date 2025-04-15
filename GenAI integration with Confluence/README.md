@@ -59,14 +59,14 @@ This project is intended for internal and educational use only. Not for commerci
 
 ## Demo 
 
-Launch the application from terminal.
+### 🚀 Launch the application from terminal.
 
 ![Application Launch](Assets/CMD.png)
 
-Application will be launched in browser. Lets try to provide it a convsersation between business and BA about creatinf a calculator, and ask it to create a requirements page in Confluence.
+### 🚀 Application will be launched in browser. Lets try to provide it a convsersation between business and BA about creatinf a calculator, and ask it to create a requirements page in Confluence.
 
 ![Prompt to create a Requirements page](Assets/Demo.png)
 
-Requirements page has been created successfully with quite impresive details like Functional requirements, deliverables, timelines etc.
+### 🚀 Requirements page has been created successfully with quite impresive details like Functional requirements, deliverables, timelines etc.
 
 ![Requirements page created](Assets/Page_created.png)
