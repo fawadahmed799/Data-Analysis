@@ -56,3 +56,17 @@ streamlit run genai_confluence_streamlit.ipynb
 ## 📎 License
 
 This project is intended for internal and educational use only. Not for commercial distribution without consent.
+
+## Demo 
+
+Launch the application from terminal.
+
+![App Screenshot](assets/CMD.png)
+
+Application will be launched in browser. Lets try to provide it a convsersation between business and BA about creatinf a calculator, and ask it to create a requirements page in Confluence.
+
+![App Screenshot](assets/Demo.png)
+
+Requirements page has been created successfully with quite impresive details like Functional requirements, deliverables, timelines etc.
+
+![App Screenshot](assets/Page_created.png)
