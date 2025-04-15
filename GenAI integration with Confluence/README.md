@@ -61,12 +61,15 @@ This project is intended for internal and educational use only. Not for commerci
 
 Launch the application from terminal.
 
-![App Screenshot](Data Analysis/GenAI integration with Confluence/assets/CMD.png)
+![Application Launch](Data-Analysis/GenAI integration with Confluence/Assets
+/CMD.png)
 
 Application will be launched in browser. Lets try to provide it a convsersation between business and BA about creatinf a calculator, and ask it to create a requirements page in Confluence.
 
-![App Screenshot](Data Analysis/GenAI integration with Confluence/assets/Demo.png)
+![Prompt to create a Requirements page](Data-Analysis/GenAI integration with Confluence/Assets
+/Demo.png)
 
 Requirements page has been created successfully with quite impresive details like Functional requirements, deliverables, timelines etc.
 
-![App Screenshot](Data Analysis/GenAI integration with Confluence/assets/Page_created.png)
+![Requirements page created](Data-Analysis/GenAI integration with Confluence/Assets
+/Page_created.png)
